@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   def index
-    @items = Item.all
+    @items = Item.where(user_id: current_user.id)
   end
 
   def show
@@ -16,7 +16,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = Item.new(item_params)
+    @item = Item.new(item_params.merge(:user_id => current_user.id))
 
     if @item.save
       redirect_to @item
@@ -44,6 +44,6 @@ end
 
   private
   def item_params
-    params.require(:item).permit(:title, :text)
+    params.require(:item).permit(:title, :text, :user_id)
   end
 end
